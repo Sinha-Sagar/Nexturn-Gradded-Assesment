@@ -15,28 +15,28 @@
 	  {
 		"name": "Sagar",
 		"email": "sinhasagar@gmail.com",
-		"address": { "street": "ABC", "city": "ARA", "zipcode": "67890" },
+		"address": { "street": "ABC", "city": "ARA", "zipcode": "678910" },
 		"phone": "123456789",
 		"registration_date": ISODate("2023-02-10T09:30:00Z")
 	  },
 	  {
 		"name": "Rohit",
 		"email": "Rohit@gamil.com",
-		"address": { "street": "789", "city": "Patna", "zipcode": "24680" },
+		"address": { "street": "789", "city": "Patna", "zipcode": "135911" },
 		"phone": "123456789",
 		"registration_date": ISODate("2023-03-15T14:15:00Z")
 	  },
 	  {
 		"name": "Vikas",
 		"email": "vikas@gmail.com",
-		"address": { "street": "101", "city": "Allahabad", "zipcode": "13579" },
+		"address": { "street": "101", "city": "Allahabad", "zipcode": "246810" },
 		"phone": "123456789",
 		"registration_date": ISODate("2023-04-05T16:45:00Z")
 	  },
 	  {
 		"name": "Prince",
 		"email": "prince@gamil.com",
-		"address": { "street": "202", "city": "Patna", "zipcode": "11223" },
+		"address": { "street": "202", "city": "Patna", "zipcode": "112233" },
 		"phone": "123456789",
 		"registration_date": ISODate("2023-05-20T11:00:00Z")
 	  }
@@ -122,9 +122,8 @@
 //2.1 Calculate Total Value of All Orders by Customer:
 
 	db.orders.aggregate([
-	  { $group: { _id: "$customer_id", totalOrderValue: { $sum: "$total_value" } } },
+	  { $group: { _id: "customer_id", totalOrderValue: { $sum: "$total_value" } } },
 	  { $lookup: { from: "customers", localField: "_id", foreignField: "_id", as: "customer_info" } },
-	  { $unwind: "$customer_info" },
 	  { $project: { _id: 0, "customer_info.name": 1, totalOrderValue: 1 } }
 	]);
 
@@ -138,9 +137,8 @@
 
 	db.orders.aggregate([
 	  { $sort: { "order_date": -1 } },
-	  { $group: { _id: "$customer_id", recentOrder: { $first: "$$ROOT" } } },
+	  { $group: { _id: "customer_id" } },
 	  { $lookup: { from: "customers", localField: "_id", foreignField: "_id", as: "customer_info" } },
-	  { $unwind: "$customer_info" },
 	  { $project: { "customer_info.name": 1, "customer_info.email": 1, "recentOrder.order_id": 1, "recentOrder.total_value": 1 } }
 	]);
 	
@@ -150,7 +148,6 @@
 	  { $sort: { "total_value": -1 } },
 	  { $group: { _id: "$customer_id", mostExpensiveOrder: { $first: "$$ROOT" } } },
 	  { $lookup: { from: "customers", localField: "_id", foreignField: "_id", as: "customer_info" } },
-	  { $unwind: "$customer_info" },
 	  { $project: { "customer_info.name": 1, "mostExpensiveOrder.order_id": 1, "mostExpensiveOrder.total_value": 1 } }
 	]);
 	
@@ -165,7 +162,6 @@
 	  { $match: { "order_date": { $gte: lastMonth } } },
 	  { $group: { _id: "$customer_id", recentOrderDate: { $max: "$order_date" } } },
 	  { $lookup: { from: "customers", localField: "_id", foreignField: "_id", as: "customer_info" } },
-	  { $unwind: "$customer_info" },
 	  { $project: { "customer_info.name": 1, "customer_info.email": 1, recentOrderDate: 1 } }
 	]);
 
@@ -176,7 +172,6 @@
 
 	db.orders.aggregate([
 	  { $match: { "customer_id": customer._id } },
-	  { $unwind: "$items" },
 	  { $group: { _id: "$items.product_name", totalQuantity: { $sum: "$items.quantity" } } }
 	]);
 
@@ -188,7 +183,6 @@
 	  { $sort: { totalOrderValue: -1 } },
 	  { $limit: 3 },
 	  { $lookup: { from: "customers", localField: "_id", foreignField: "_id", as: "customer_info" } },
-	  { $unwind: "$customer_info" },
 	  { $project: { "customer_info.name": 1, totalOrderValue: 1 } }
 	]);
 
@@ -223,7 +217,6 @@
 //4.2. Calculate the Average Number of Items Ordered per Order:
 
 	db.orders.aggregate([
-	  { $unwind: "$items" },
 	  { $group: { _id: "$_id", itemCount: { $sum: 1 } } },
 	  { $group: { _id: null, averageItemsPerOrder: { $avg: "$itemCount" } } },
 	  { $project: { _id: 0, averageItemsPerOrder: 1 } }
@@ -233,7 +226,6 @@
 
 	db.orders.aggregate([
 	  { $lookup: { from: "customers", localField: "customer_id", foreignField: "_id", as: "customer_info" } },
-	  { $unwind: "$customer_info" },
 	  { $project: { "customer_info.name": 1, "customer_info.email": 1, "order_id": 1, "total_value": 1, "order_date": 1 } }
 	]);
 

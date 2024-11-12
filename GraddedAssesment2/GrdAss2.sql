@@ -14,30 +14,30 @@
 	  },
 	  {
 		"name": "Sagar",
-		"email": "sinhasagar@example.com",
-		"address": { "street": "456", "city": "Greenfield", "zipcode": "67890" },
-		"phone": "555-6789",
+		"email": "sinhasagar@gmail.com",
+		"address": { "street": "ABC", "city": "ARA", "zipcode": "67890" },
+		"phone": "123456789",
 		"registration_date": ISODate("2023-02-10T09:30:00Z")
 	  },
 	  {
-		"name": "Alice Johnson",
-		"email": "alicej@example.com",
-		"address": { "street": "789 Oak St", "city": "Lincoln", "zipcode": "24680" },
-		"phone": "555-2468",
+		"name": "Rohit",
+		"email": "Rohit@gamil.com",
+		"address": { "street": "789", "city": "Patna", "zipcode": "24680" },
+		"phone": "123456789",
 		"registration_date": ISODate("2023-03-15T14:15:00Z")
 	  },
 	  {
-		"name": "Bob Williams",
-		"email": "bobwilliams@example.com",
-		"address": { "street": "101 Maple St", "city": "Riverdale", "zipcode": "13579" },
-		"phone": "555-1357",
+		"name": "Vikas",
+		"email": "vikas@gmail.com",
+		"address": { "street": "101", "city": "Allahabad", "zipcode": "13579" },
+		"phone": "123456789",
 		"registration_date": ISODate("2023-04-05T16:45:00Z")
 	  },
 	  {
-		"name": "Emily Davis",
-		"email": "emilyd@example.com",
-		"address": { "street": "202 Birch St", "city": "Summerville", "zipcode": "11223" },
-		"phone": "555-1122",
+		"name": "Prince",
+		"email": "prince@gamil.com",
+		"address": { "street": "202", "city": "Patna", "zipcode": "11223" },
+		"phone": "123456789",
 		"registration_date": ISODate("2023-05-20T11:00:00Z")
 	  }
 	]);
@@ -131,7 +131,7 @@
 //2.2. Group Orders by Status:
 
 	db.orders.aggregate([
-		{ $group: { _id: "$status", count: { $sum: 1 } } }
+		{ $group: { _id: "$status" } }
 	]);
 
 //2.3. List Customers with Their Recent Orders:
